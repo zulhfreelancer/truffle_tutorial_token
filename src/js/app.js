@@ -12,8 +12,10 @@ App = {
       App.web3Provider = web3.currentProvider;
       web3 = new Web3(web3.currentProvider);
     } else {
-      // set the provider you want from Web3.providers
-      App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
+      console.log("web3 is undefined");
+      // set provider to Ganache (simulating user's local Geth/Mist) process
+      // Ganache is Web3 Provider too
+      App.web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
       web3 = new Web3(App.web3Provider);
     }
 
@@ -21,6 +23,9 @@ App = {
   },
 
   initContract: function() {
+    // ABI is available at http://localhost:3000/TutorialToken.json
+    // because we are using lite-server baseDir (see bs-config.json file)
+    // https://github.com/johnpapa/lite-server
     $.getJSON('TutorialToken.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract.
       var TutorialTokenArtifact = data;
@@ -29,7 +34,6 @@ App = {
       // Set the provider for our contract.
       App.contracts.TutorialToken.setProvider(App.web3Provider);
 
-      // Use our contract to retieve and mark the adopted pets.
       return App.getBalances();
     });
 
